@@ -27,10 +27,10 @@ For comprehensive documentation, examples, and guides, visit the [**docs**](docs
 ## ✨ Features
 
 - 🚀 **Complete Version Management**: Create, edit, and manage app versions for iOS, Android, and cross-platform releases
-- 🌍 **Multilingual Support**: Full localization with JSON multilingual fields supporting any language
+- 🌍 **Multilingual Support**: Full localization with JSON multilingual fields and API locale support
 - 📱 **Platform Support**: iOS, Android, and All platforms with Filament enum integration
 - 🔄 **Version Rollback**: Built-in rollback functionality with proper validation
-- 📊 **API Integration**: RESTful API endpoints for version checking with caching and rate limiting
+- 📊 **API Integration**: RESTful API endpoints with localization, caching, and rate limiting
 - ⚡ **Force Updates**: Configure mandatory updates for critical releases
 - 🧪 **Beta Versions**: Support for beta releases and testing
 - 📈 **Metadata Support**: Store additional version metadata as JSON
@@ -144,7 +144,8 @@ The plugin configuration file is published to `config/filament-app-version-manag
 ```php
 'localization' => [
     'supported_locales' => ['en', 'ar'],  // Supported locales for multilingual fields
-    'default_locale' => 'en',             // Default locale
+    'default_locale' => 'en',             // Default locale for API fallback
+    'fallback_locale' => 'en',            // Fallback locale when default is not available
 ],
 ```
 
@@ -259,6 +260,7 @@ All configuration values can be overridden using fluent methods:
 ```php
 ->supportedLocales(array|Closure $locales)
 ->defaultLocale(string|Closure $locale)
+->fallbackLocale(string|Closure $locale)
 ```
 
 ### Bulk Configuration
@@ -337,6 +339,45 @@ Content-Type: application/json
     "checked_at": "2025-07-01T12:00:00.000000Z"
 }
 ```
+
+#### Localized API Responses
+
+When a `locale` parameter is provided, the API returns localized content for that specific language:
+
+**Request with locale:**
+```http
+POST /api/version/check
+Content-Type: application/json
+
+{
+    "platform": "ios",
+    "current_version": "1.0.0",
+    "locale": "ar"
+}
+```
+
+**Localized Response:**
+```json
+{
+    "success": true,
+    "current_version": "1.0.0",
+    "platform": "ios",
+    "platform_label": "iOS",
+    "update_available": true,
+    "latest_version": "1.1.0",
+    "force_update": false,
+    "download_url": "https://apps.apple.com/app/yourapp",
+    "release_date": "2025-07-01T10:00:00.000000Z",
+    "release_notes": "إصلاح الأخطاء والتحسينات",
+    "checked_at": "2025-07-01T12:00:00.000000Z"
+}
+```
+
+**Fallback Logic:**
+- If the requested locale is not available, falls back to the default locale
+- If the default locale is not available, falls back to the fallback locale
+- If no locales are available, returns the first available translation
+- Maintains backward compatibility when no locale is specified
 
 **Response when no update available:**
 ```json

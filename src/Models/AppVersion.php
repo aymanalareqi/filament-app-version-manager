@@ -185,6 +185,47 @@ class AppVersion extends Model
     }
 
     /**
+     * Get localized release notes for a specific locale.
+     * Falls back to default locale, then to first available translation.
+     * Returns array of all translations if no locale specified (backward compatibility).
+     */
+    public function getLocalizedReleaseNotes(?string $locale = null): array|string|null
+    {
+        $releaseNotes = $this->release_notes;
+
+        // If release_notes is null or empty, return null
+        if (empty($releaseNotes) || !is_array($releaseNotes)) {
+            return null;
+        }
+
+        // If no locale specified, return all translations (backward compatibility)
+        if (is_null($locale)) {
+            return $releaseNotes;
+        }
+
+        // Try requested locale first
+        if (isset($releaseNotes[$locale]) && !empty($releaseNotes[$locale])) {
+            return $releaseNotes[$locale];
+        }
+
+        // Fall back to default locale from configuration
+        $defaultLocale = config('filament-app-version-manager.localization.default_locale', 'en');
+        if (isset($releaseNotes[$defaultLocale]) && !empty($releaseNotes[$defaultLocale])) {
+            return $releaseNotes[$defaultLocale];
+        }
+
+        // Fall back to fallback locale from configuration
+        $fallbackLocale = config('filament-app-version-manager.localization.fallback_locale', 'en');
+        if ($fallbackLocale !== $defaultLocale && isset($releaseNotes[$fallbackLocale]) && !empty($releaseNotes[$fallbackLocale])) {
+            return $releaseNotes[$fallbackLocale];
+        }
+
+        // Return first available translation
+        $firstAvailable = array_values(array_filter($releaseNotes));
+        return !empty($firstAvailable) ? $firstAvailable[0] : null;
+    }
+
+    /**
      * Get platform display name.
      */
     public function getPlatformNameAttribute(): string
@@ -245,7 +286,7 @@ class AppVersion extends Model
     /**
      * Check if an update is available for a given version and platform.
      */
-    public static function isUpdateAvailable(string $currentVersion, Platform|string $platform): array
+    public static function isUpdateAvailable(string $currentVersion, Platform|string $platform, ?string $locale = null): array
     {
         $latestVersion = static::getLatestForPlatform($platform);
 
@@ -263,8 +304,8 @@ class AppVersion extends Model
         $updateAvailable = $latestVersion->isNewerThan($currentVersion);
         $forceUpdate = $latestVersion->requiresForceUpdateFrom($currentVersion);
 
-        // Get release notes (accessor should handle JSON decoding)
-        $releaseNotes = $latestVersion->release_notes;
+        // Get localized release notes based on requested locale
+        $releaseNotes = $latestVersion->getLocalizedReleaseNotes($locale);
 
         return [
             'update_available' => $updateAvailable,

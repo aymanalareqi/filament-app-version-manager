@@ -43,6 +43,11 @@ class VersionController extends Controller
                 'string',
                 'max:' . config('filament-app-version-manager.validation.max_build_number_length', 50),
             ],
+            'locale' => [
+                'nullable',
+                'string',
+                'max:10',
+            ],
         ]);
 
         if ($validator->fails()) {
@@ -56,14 +61,15 @@ class VersionController extends Controller
         $currentVersion = $request->input('current_version');
         $platform = Platform::from($request->input('platform'));
         $buildNumber = $request->input('build_number');
+        $locale = $request->input('locale');
 
-        // Create cache key
-        $cacheKey = "app_version_check_{$platform->value}_{$currentVersion}_{$buildNumber}";
+        // Create cache key (include locale for proper caching)
+        $cacheKey = "app_version_check_{$platform->value}_{$currentVersion}_{$buildNumber}_{$locale}";
         $cacheTtl = FilamentAppVersionManager::getCacheTtl();
 
         // Try to get from cache
-        $response = Cache::remember($cacheKey, $cacheTtl, function () use ($currentVersion, $platform) {
-            return $this->performVersionCheck($currentVersion, $platform);
+        $response = Cache::remember($cacheKey, $cacheTtl, function () use ($currentVersion, $platform, $locale) {
+            return $this->performVersionCheck($currentVersion, $platform, $locale);
         });
 
         return response()->json($response);
@@ -72,7 +78,7 @@ class VersionController extends Controller
     /**
      * Perform the actual version check.
      */
-    private function performVersionCheck(string $currentVersion, Platform $platform): array
+    private function performVersionCheck(string $currentVersion, Platform $platform, ?string $locale = null): array
     {
         try {
             // Validate semantic versioning if enabled
@@ -86,7 +92,7 @@ class VersionController extends Controller
             }
 
             // Get update information
-            $updateInfo = AppVersion::isUpdateAvailable($currentVersion, $platform);
+            $updateInfo = AppVersion::isUpdateAvailable($currentVersion, $platform, $locale);
 
             // Prepare response
             $response = [

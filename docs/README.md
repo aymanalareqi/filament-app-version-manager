@@ -12,7 +12,7 @@ Welcome to the comprehensive documentation for the Filament App Version Manager 
 ### Features
 - [Fluent API](fluent-api.md) - Advanced configuration with method chaining
 - [Multilingual Support](multilingual.md) - Setting up multilingual release notes
-- [API Integration](api-integration.md) - RESTful API endpoints and usage
+- [API Documentation](api.md) - RESTful API endpoints with localization support
 - [Version Management](version-management.md) - Managing app versions effectively
 
 ### Advanced Topics
@@ -30,6 +30,7 @@ Welcome to the comprehensive documentation for the Filament App Version Manager 
 - [Basic Configuration](../examples/basic-configuration.php) - Simple setup examples
 - [Advanced Configuration](../examples/advanced-configuration.php) - Complex configuration scenarios
 - [API Usage Examples](../examples/api-usage-examples.php) - Multi-language API integration
+- [Localized API Usage](../examples/localized-api-usage.php) - Localized API integration examples
 
 ## 🚀 Quick Links
 

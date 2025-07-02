@@ -23,6 +23,17 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
+        // Set up auth configuration for testing
+        config()->set('auth.guards.admin', [
+            'driver' => 'session',
+            'provider' => 'users',
+        ]);
+
+        config()->set('auth.providers.users', [
+            'driver' => 'eloquent',
+            'model' => \Illuminate\Foundation\Auth\User::class,
+        ]);
+
         $migration = include __DIR__ . '/../database/migrations/create_app_versions_table.php';
         $migration->up();
     }

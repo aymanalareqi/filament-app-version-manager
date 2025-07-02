@@ -18,13 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Configuration Examples**: Basic and advanced configuration examples with environment-based setups
 - **API Usage Examples**: Multi-language API integration examples (PHP, JavaScript, Swift, Kotlin)
 - **Enhanced Error Handling**: Improved error handling and validation throughout the system
-- **Extensive Testing**: 50+ tests with 125+ assertions covering all functionality including edge cases
+- **Localized API Responses**: API endpoints now support locale parameter for localized release notes with intelligent fallback logic
+- **Comprehensive API Documentation**: Detailed API documentation with examples for multiple programming languages
+- **Extensive Testing**: 53+ tests with 141+ assertions covering all functionality including localized API responses
 
 ### Changed
 - **Multilingual Release Notes**: Replaced KeyValue component with individual textarea fields in language tabs
 - **Navigation Group Handling**: Enhanced navigation group configuration with proper localization support
 - **Configuration Structure**: Improved configuration organization and validation
-- **API Response Format**: Enhanced API responses with more detailed information and better error handling
+- **API Response Format**: Enhanced API responses with localized content support and better error handling
+- **Localization Configuration**: Added fallback_locale configuration for improved multilingual support
 - **Documentation Structure**: Reorganized and expanded documentation with practical examples
 - **Test Coverage**: Significantly expanded test coverage including configuration overrides and multilingual features
 
