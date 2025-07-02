@@ -4,6 +4,7 @@ return [
     'singular_label' => 'App Version',
     'plural_label' => 'App Versions',
     'navigation_label' => 'App Versions',
+    'navigation_group' => 'Version Management',
 
     'sections' => [
         'version_info' => 'Version Information',
@@ -51,6 +52,7 @@ return [
         'build_number' => 'e.g., 100',
         'minimum_required_version' => 'e.g., 0.9.0',
         'download_url' => 'https://example.com/download',
+        'release_notes' => 'Enter release notes in :language...',
     ],
 
     'help' => [

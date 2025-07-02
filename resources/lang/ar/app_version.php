@@ -4,6 +4,7 @@ return [
     'singular_label' => 'إصدار التطبيق',
     'plural_label' => 'إصدارات التطبيق',
     'navigation_label' => 'إصدارات التطبيق',
+    'navigation_group' => 'إدارة الإصدارات',
 
     'sections' => [
         'version_info' => 'معلومات الإصدار',
@@ -51,6 +52,7 @@ return [
         'build_number' => 'مثال: 100',
         'minimum_required_version' => 'مثال: 0.9.0',
         'download_url' => 'https://example.com/download',
+        'release_notes' => 'أدخل ملاحظات الإصدار باللغة :language...',
     ],
 
     'help' => [

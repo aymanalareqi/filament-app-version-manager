@@ -5,6 +5,7 @@ namespace Alareqi\FilamentAppVersionManager\Resources;
 use Alareqi\FilamentAppVersionManager\Resources\AppVersionResource\Pages;
 use Alareqi\FilamentAppVersionManager\Enums\Platform;
 use Alareqi\FilamentAppVersionManager\Models\AppVersion;
+use Alareqi\FilamentAppVersionManager\FilamentAppVersionManagerPlugin;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,23 +20,40 @@ class AppVersionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rocket-launch';
 
-    protected static ?string $navigationGroup = 'Version Management';
-
     protected static ?int $navigationSort = 1;
+
+    /**
+     * Get configuration value through plugin system with fallback to config file
+     */
+    protected static function getConfig(?string $key = null, mixed $default = null): mixed
+    {
+        try {
+            // Try to get the plugin instance
+            $plugin = FilamentAppVersionManagerPlugin::get();
+            return $plugin->getConfig($key, $default);
+        } catch (\Exception) {
+            // Fallback to direct config access if plugin is not available
+            if ($key === null) {
+                return config('filament-app-version-manager');
+            }
+            return config("filament-app-version-manager.{$key}", $default);
+        }
+    }
 
     public static function getNavigationGroup(): ?string
     {
-        return __(config('filament-app-version-manager.navigation.group', 'Version Management'));
+        $group = static::getConfig('navigation.group', __('filament-app-version-manager::app_version.navigation_group'));
+        return $group ?? __('filament-app-version-manager::app_version.navigation_group');
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return config('filament-app-version-manager.navigation.icon', 'heroicon-o-rocket-launch');
+        return static::getConfig('navigation.icon', 'heroicon-o-rocket-launch');
     }
 
     public static function getNavigationSort(): ?int
     {
-        return config('filament-app-version-manager.navigation.sort', 1);
+        return static::getConfig('navigation.sort', 1);
     }
 
     public static function getModelLabel(): string
@@ -64,11 +82,11 @@ class AppVersionResource extends Resource
                             ->placeholder(__('filament-app-version-manager::app_version.placeholders.version'))
                             ->helperText(__('filament-app-version-manager::app_version.help.version'))
                             ->required()
-                            ->maxLength(config('filament-app-version-manager.validation.max_version_length', 20))
+                            ->maxLength(static::getConfig('validation.max_version_length', 20))
                             ->rules([
                                 'required',
                                 'string',
-                                'max:' . config('filament-app-version-manager.validation.max_version_length', 20),
+                                'max:' . static::getConfig('validation.max_version_length', 20),
                                 function ($attribute, $value, $fail) {
                                     if (!AppVersion::validateSemanticVersion($value)) {
                                         $fail(__('filament-app-version-manager::app_version.validation.version_format'));
@@ -83,25 +101,25 @@ class AppVersionResource extends Resource
                             ->label(__('filament-app-version-manager::app_version.fields.build_number'))
                             ->placeholder(__('filament-app-version-manager::app_version.placeholders.build_number'))
                             ->helperText(__('filament-app-version-manager::app_version.help.build_number'))
-                            ->maxLength(config('filament-app-version-manager.validation.max_build_number_length', 50)),
+                            ->maxLength(static::getConfig('validation.max_build_number_length', 50)),
 
                         Forms\Components\Select::make('platform')
                             ->label(__('filament-app-version-manager::app_version.fields.platform'))
                             ->helperText(__('filament-app-version-manager::app_version.help.platform'))
                             ->options(Platform::class)
                             ->required()
-                            ->default(config('filament-app-version-manager.defaults.platform', Platform::ALL))
+                            ->default(static::getConfig('defaults.platform', Platform::ALL))
                             ->reactive(),
 
                         Forms\Components\TextInput::make('minimum_required_version')
                             ->label(__('filament-app-version-manager::app_version.fields.minimum_required_version'))
                             ->placeholder(__('filament-app-version-manager::app_version.placeholders.minimum_required_version'))
                             ->helperText(__('filament-app-version-manager::app_version.help.minimum_required_version'))
-                            ->maxLength(config('filament-app-version-manager.validation.max_version_length', 20))
+                            ->maxLength(static::getConfig('validation.max_version_length', 20))
                             ->rules([
                                 'nullable',
                                 'string',
-                                'max:' . config('filament-app-version-manager.validation.max_version_length', 20),
+                                'max:' . static::getConfig('validation.max_version_length', 20),
                                 function ($attribute, $value, $fail) {
                                     if ($value && !AppVersion::validateSemanticVersion($value)) {
                                         $fail(__('filament-app-version-manager::app_version.validation.minimum_version_format'));
@@ -125,20 +143,14 @@ class AppVersionResource extends Resource
                             ->placeholder(__('filament-app-version-manager::app_version.placeholders.download_url'))
                             ->helperText(__('filament-app-version-manager::app_version.help.download_url'))
                             ->url()
-                            ->maxLength(config('filament-app-version-manager.validation.max_download_url_length', 500))
+                            ->maxLength(static::getConfig('validation.max_download_url_length', 500))
                             ->columnSpanFull(),
 
-                        Forms\Components\KeyValue::make('release_notes')
+                        Forms\Components\Tabs::make('release_notes_tabs')
                             ->label(__('filament-app-version-manager::app_version.fields.release_notes'))
-                            ->helperText(__('filament-app-version-manager::app_version.help.release_notes'))
-                            ->keyLabel(__('filament-app-version-manager::app_version.fields.language'))
-                            ->valueLabel(__('filament-app-version-manager::app_version.fields.notes'))
-                            ->default([
-                                'en' => '',
-                                'ar' => '',
-                            ])
+                            ->tabs(static::getReleaseNotesLanguageTabs())
                             ->columnSpanFull()
-                            ->visible(config('filament-app-version-manager.features.multilingual_release_notes', true)),
+                            ->visible(static::getConfig('features.multilingual_release_notes', true)),
                     ])
                     ->columns(2),
 
@@ -147,25 +159,25 @@ class AppVersionResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->label(__('filament-app-version-manager::app_version.fields.is_active'))
                             ->helperText(__('filament-app-version-manager::app_version.help.is_active'))
-                            ->default(config('filament-app-version-manager.defaults.is_active', true)),
+                            ->default(static::getConfig('defaults.is_active', true)),
 
                         Forms\Components\Toggle::make('force_update')
                             ->label(__('filament-app-version-manager::app_version.fields.force_update'))
                             ->helperText(__('filament-app-version-manager::app_version.help.force_update'))
-                            ->default(config('filament-app-version-manager.defaults.force_update', false))
-                            ->visible(config('filament-app-version-manager.features.force_updates', true)),
+                            ->default(static::getConfig('defaults.force_update', false))
+                            ->visible(static::getConfig('features.force_updates', true)),
 
                         Forms\Components\Toggle::make('is_beta')
                             ->label(__('filament-app-version-manager::app_version.fields.is_beta'))
                             ->helperText(__('filament-app-version-manager::app_version.help.is_beta'))
-                            ->default(config('filament-app-version-manager.defaults.is_beta', false))
-                            ->visible(config('filament-app-version-manager.features.beta_versions', true)),
+                            ->default(static::getConfig('defaults.is_beta', false))
+                            ->visible(static::getConfig('features.beta_versions', true)),
 
                         Forms\Components\Toggle::make('is_rollback')
                             ->label(__('filament-app-version-manager::app_version.fields.is_rollback'))
                             ->helperText(__('filament-app-version-manager::app_version.help.is_rollback'))
-                            ->default(config('filament-app-version-manager.defaults.is_rollback', false))
-                            ->visible(config('filament-app-version-manager.features.version_rollback', true)),
+                            ->default(static::getConfig('defaults.is_rollback', false))
+                            ->visible(static::getConfig('features.version_rollback', true)),
                     ])
                     ->columns(2),
 
@@ -178,7 +190,7 @@ class AppVersionResource extends Resource
                             ->valueLabel(__('filament-app-version-manager::app_version.fields.value'))
                             ->columnSpanFull(),
                     ])
-                    ->visible(config('filament-app-version-manager.features.metadata_storage', true))
+                    ->visible(static::getConfig('features.metadata_storage', true))
                     ->collapsible()
                     ->collapsed(),
             ]);
@@ -219,14 +231,14 @@ class AppVersionResource extends Resource
                     ->boolean()
                     ->sortable()
                     ->toggleable()
-                    ->visible(config('filament-app-version-manager.features.force_updates', true)),
+                    ->visible(static::getConfig('features.force_updates', true)),
 
                 Tables\Columns\IconColumn::make('is_beta')
                     ->label(__('filament-app-version-manager::app_version.columns.is_beta'))
                     ->boolean()
                     ->sortable()
                     ->toggleable()
-                    ->visible(config('filament-app-version-manager.features.beta_versions', true)),
+                    ->visible(static::getConfig('features.beta_versions', true)),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('filament-app-version-manager::app_version.columns.created_at'))
@@ -250,11 +262,11 @@ class AppVersionResource extends Resource
 
                 Tables\Filters\TernaryFilter::make('force_update')
                     ->label(__('filament-app-version-manager::app_version.filters.force_update'))
-                    ->visible(config('filament-app-version-manager.features.force_updates', true)),
+                    ->visible(static::getConfig('features.force_updates', true)),
 
                 Tables\Filters\TernaryFilter::make('is_beta')
                     ->label(__('filament-app-version-manager::app_version.filters.is_beta'))
-                    ->visible(config('filament-app-version-manager.features.beta_versions', true)),
+                    ->visible(static::getConfig('features.beta_versions', true)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -273,6 +285,61 @@ class AppVersionResource extends Resource
         return [
             //
         ];
+    }
+
+    /**
+     * Get language tabs for multilingual release notes
+     */
+    protected static function getReleaseNotesLanguageTabs(): array
+    {
+        $supportedLocales = static::getConfig('localization.supported_locales', ['ar', 'en']);
+        $tabs = [];
+
+        // Ensure we have an array of locales
+        if (!is_array($supportedLocales) || empty($supportedLocales)) {
+            $supportedLocales = ['ar', 'en'];
+        }
+
+        foreach ($supportedLocales as $locale) {
+            $languageLabel = static::getLanguageLabel($locale);
+
+            $tabs[] = Forms\Components\Tabs\Tab::make($locale)
+                ->label($languageLabel)
+                ->schema([
+                    Forms\Components\Textarea::make("release_notes.{$locale}")
+                        ->label(__('filament-app-version-manager::app_version.fields.notes'))
+                        ->helperText(__('filament-app-version-manager::app_version.help.release_notes'))
+                        ->placeholder(__('filament-app-version-manager::app_version.placeholders.release_notes', ['language' => $languageLabel]))
+                        ->rows(6)
+                        ->maxLength(2000)
+                        ->columnSpanFull()
+                        ->default(''),
+                ]);
+        }
+
+        return $tabs;
+    }
+
+    /**
+     * Get human-readable language label for a locale code
+     */
+    protected static function getLanguageLabel(string $locale): string
+    {
+        $labels = [
+            'ar' => 'العربية',
+            'en' => 'English',
+            'fr' => 'Français',
+            'es' => 'Español',
+            'de' => 'Deutsch',
+            'it' => 'Italiano',
+            'pt' => 'Português',
+            'ru' => 'Русский',
+            'zh' => '中文',
+            'ja' => '日本語',
+            'ko' => '한국어',
+        ];
+
+        return $labels[$locale] ?? strtoupper($locale);
     }
 
     public static function getPages(): array

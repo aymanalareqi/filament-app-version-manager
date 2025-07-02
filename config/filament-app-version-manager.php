@@ -28,7 +28,7 @@ return [
     |
     */
     'navigation' => [
-        'group' => 'Version Management',
+        'group' => null, // defaul __('filament-app-version-manager::app_version.navigation_group')
         'icon' => 'heroicon-o-rocket-launch',
         'sort' => 1,
     ],
@@ -129,8 +129,8 @@ return [
     |
     */
     'localization' => [
-        'default_locale' => 'en',
-        'supported_locales' => ['en', 'ar'],
+        'default_locale' => 'ar',
+        'supported_locales' => ['ar', 'en'],
         'fallback_locale' => 'en',
     ],
 
