@@ -38,9 +38,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Alareqi\\FilamentAppVersionManager\\": "src/",
-            "Alareqi\\FilamentAppVersionManager\\Database\\Factories\\": "database/factories/",
-            "Alareqi\\FilamentAppVersionManager\\Database\\Seeders\\": "database/seeders/"
+            "Alareqi\\FilamentAppVersionManager\\": "src/"
         }
     },
     "autoload-dev": {

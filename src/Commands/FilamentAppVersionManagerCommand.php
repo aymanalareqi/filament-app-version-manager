@@ -38,11 +38,8 @@ class FilamentAppVersionManagerCommand extends Command
             $this->call('migrate');
         }
 
-        if ($this->confirm('Would you like to seed sample app versions?')) {
-            $this->call('db:seed', [
-                '--class' => 'Alareqi\\FilamentAppVersionManager\\Database\\Seeders\\AppVersionSeeder',
-            ]);
-        }
+        // Sample data creation has been removed from the package
+        // Users can create their own sample data as needed
 
         $this->comment('Please add the plugin to your Filament panel provider:');
         $this->line('');

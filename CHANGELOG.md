@@ -2,6 +2,44 @@
 
 All notable changes to `filament-app-version-manager` will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- **Fluent API System**: Comprehensive fluent API with method chaining support for all configuration options
+- **Closure Support**: Dynamic configuration with closure support and lazy evaluation for runtime-dependent values
+- **Advanced Configuration Override**: Plugin configuration overrides with precedence handling over config file values
+- **Enhanced Multilingual UI**: Improved multilingual release notes with individual textarea fields and language tabs
+- **Navigation Localization**: Proper navigation group localization with fallback to translated defaults
+- **Production Readiness**: Removed development artifacts (seeders, factories) for production deployment
+- **Comprehensive Documentation**: Extensive README with installation, configuration, API usage, and troubleshooting
+- **Configuration Examples**: Basic and advanced configuration examples with environment-based setups
+- **API Usage Examples**: Multi-language API integration examples (PHP, JavaScript, Swift, Kotlin)
+- **Enhanced Error Handling**: Improved error handling and validation throughout the system
+- **Extensive Testing**: 50+ tests with 125+ assertions covering all functionality including edge cases
+
+### Changed
+- **Multilingual Release Notes**: Replaced KeyValue component with individual textarea fields in language tabs
+- **Navigation Group Handling**: Enhanced navigation group configuration with proper localization support
+- **Configuration Structure**: Improved configuration organization and validation
+- **API Response Format**: Enhanced API responses with more detailed information and better error handling
+- **Documentation Structure**: Reorganized and expanded documentation with practical examples
+- **Test Coverage**: Significantly expanded test coverage including configuration overrides and multilingual features
+
+### Removed
+- **Development Artifacts**: Removed database seeders and model factories for production readiness
+- **Outdated References**: Cleaned up outdated seeder references in commands and documentation
+- **Development Configuration**: Removed development-specific setup code and sample data generation
+
+### Fixed
+- **Configuration Precedence**: Fixed plugin configuration override precedence over config file values
+- **Null Value Handling**: Improved null value handling in configuration system
+- **Language Tab Generation**: Fixed language tab generation for multilingual release notes
+- **Navigation Localization**: Resolved navigation group localization edge cases
+- **Closure Evaluation**: Fixed closure evaluation timing and context issues
+
 ## [1.0.0] - 2025-07-01
 
 ### Added

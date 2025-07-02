@@ -5,7 +5,7 @@ composer.lock
 
 # Laravel Package Development
 /build/
-/docs/
+# /docs/
 /.phpunit.cache/
 .phpunit.result.cache
 
