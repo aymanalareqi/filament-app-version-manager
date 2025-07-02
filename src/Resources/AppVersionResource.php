@@ -6,6 +6,7 @@ use Alareqi\FilamentAppVersionManager\Resources\AppVersionResource\Pages;
 use Alareqi\FilamentAppVersionManager\Enums\Platform;
 use Alareqi\FilamentAppVersionManager\Models\AppVersion;
 use Alareqi\FilamentAppVersionManager\FilamentAppVersionManagerPlugin;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,22 +25,36 @@ class AppVersionResource extends Resource
 
     /**
      * Get configuration value through plugin system with fallback to config file
+     * Always returns evaluated values (not closures) for use in form components
      */
-    protected static function getConfig(?string $key = null, mixed $default = null): mixed
+    public static function getConfig(?string $key = null, mixed $default = null): mixed
     {
         try {
             // Try to get the plugin instance
             $plugin = FilamentAppVersionManagerPlugin::get();
             $result = $plugin->getConfig($key, $default);
+
+            // Ensure closures are evaluated for form component usage
+            if ($result instanceof \Closure) {
+                $result = $result();
+            }
+
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Fallback to direct config access if plugin is not available
             if ($key === null) {
                 return config('filament-app-version-manager');
             }
             $configValue = config("filament-app-version-manager.{$key}");
             // If config value is null, use the default
-            return $configValue === null ? $default : $configValue;
+            $result = $configValue === null ? $default : $configValue;
+
+            // Ensure closures are evaluated for form component usage
+            if ($result instanceof \Closure) {
+                $result = $result();
+            }
+
+            return $result;
         }
     }
 
@@ -90,7 +105,7 @@ class AppVersionResource extends Resource
                                 'required',
                                 'string',
                                 'max:' . static::getConfig('validation.max_version_length', 20),
-                                function ($attribute, $value, $fail) {
+                                fn(): Closure => function (string $attribute, $value, Closure $fail) {
                                     if (!AppVersion::validateSemanticVersion($value)) {
                                         $fail(__('filament-app-version-manager::app_version.validation.version_format'));
                                     }
@@ -123,7 +138,7 @@ class AppVersionResource extends Resource
                                 'nullable',
                                 'string',
                                 'max:' . static::getConfig('validation.max_version_length', 20),
-                                function ($attribute, $value, $fail) {
+                                fn(): Closure => function (string $attribute, $value, Closure $fail) {
                                     if ($value && !AppVersion::validateSemanticVersion($value)) {
                                         $fail(__('filament-app-version-manager::app_version.validation.minimum_version_format'));
                                     }
@@ -211,11 +226,9 @@ class AppVersionResource extends Resource
                     ->copyable()
                     ->copyMessage(__('filament-app-version-manager::app_version.messages.copied')),
 
-                Tables\Columns\SelectColumn::make('platform')
+                Tables\Columns\TextColumn::make('platform')
                     ->label(__('filament-app-version-manager::app_version.columns.platform'))
-                    ->options(Platform::class)
-                    ->sortable()
-                    ->selectablePlaceholder(false),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('release_date')
                     ->label(__('filament-app-version-manager::app_version.columns.release_date'))

@@ -14,8 +14,7 @@ class EditAppVersion extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()
-                ->label(__('filament-app-version-manager::app_version.actions.delete')),
+            Actions\DeleteAction::make(),
 
             Actions\Action::make('duplicate')
                 ->label(__('filament-app-version-manager::app_version.actions.duplicate'))

@@ -15,10 +15,6 @@ class CreateAppVersion extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function getCreatedNotificationTitle(): ?string
-    {
-        return __('filament-app-version-manager::app_version.messages.created');
-    }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
