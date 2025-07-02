@@ -30,13 +30,16 @@ class AppVersionResource extends Resource
         try {
             // Try to get the plugin instance
             $plugin = FilamentAppVersionManagerPlugin::get();
-            return $plugin->getConfig($key, $default);
-        } catch (\Exception) {
+            $result = $plugin->getConfig($key, $default);
+            return $result;
+        } catch (\Exception $e) {
             // Fallback to direct config access if plugin is not available
             if ($key === null) {
                 return config('filament-app-version-manager');
             }
-            return config("filament-app-version-manager.{$key}", $default);
+            $configValue = config("filament-app-version-manager.{$key}");
+            // If config value is null, use the default
+            return $configValue === null ? $default : $configValue;
         }
     }
 

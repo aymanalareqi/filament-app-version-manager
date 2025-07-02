@@ -70,6 +70,9 @@ describe('AppVersionResource Configuration Integration', function () {
 
     describe('Configuration Helper Method', function () {
         it('falls back to config file when plugin is not available', function () {
+            // Manually set the config to override the package config
+            config(['filament-app-version-manager.navigation.group' => 'Version Management']);
+
             // Test the static getConfig method behavior
             $reflection = new ReflectionClass(AppVersionResource::class);
             $method = $reflection->getMethod('getConfig');
@@ -96,9 +99,18 @@ describe('AppVersionResource Configuration Integration', function () {
             $method = $reflection->getMethod('getConfig');
             $method->setAccessible(true);
 
-            // This should not throw an exception even if plugin retrieval fails
-            $result = $method->invoke(null, 'navigation.group', 'Default');
-            expect($result)->toBeString();
+            // Laravel's config() returns null when a key is explicitly set to null
+            // Our plugin should handle this and return the default instead
+            $configResult = config('filament-app-version-manager.navigation.group', 'Default Group');
+            expect($configResult)->toBeNull(); // Laravel returns null for explicitly null config values
+
+            // But our plugin's getConfig should return the default when config is null
+            $result = $method->invoke(null, 'navigation.group', 'Default Group');
+            expect($result)->toBe('Default Group');
+
+            // Test with a config key that doesn't exist to ensure default is returned
+            $result2 = $method->invoke(null, 'non.existent.key', 'Default');
+            expect($result2)->toBe('Default');
         });
     });
 

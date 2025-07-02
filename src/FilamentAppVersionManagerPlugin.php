@@ -8,13 +8,13 @@ use Alareqi\FilamentAppVersionManager\Resources\AppVersionResource;
 
 class FilamentAppVersionManagerPlugin implements Plugin
 {
-    protected bool $hasApiRoutes = true;
+    protected bool|\Closure $hasApiRoutes = true;
 
-    protected ?string $navigationGroup = null;
+    protected string|\Closure|null $navigationGroup = null;
 
-    protected ?string $navigationIcon = 'heroicon-o-rocket-launch';
+    protected string|\Closure|null $navigationIcon = 'heroicon-o-rocket-launch';
 
-    protected ?int $navigationSort = null;
+    protected int|\Closure|null $navigationSort = null;
 
     /**
      * Configuration overrides that take precedence over config file values
@@ -52,7 +52,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
         return $plugin;
     }
 
-    public function hasApiRoutes(bool $condition = true): static
+    public function hasApiRoutes(bool|\Closure $condition = true): static
     {
         $this->hasApiRoutes = $condition;
 
@@ -61,10 +61,10 @@ class FilamentAppVersionManagerPlugin implements Plugin
 
     public function getHasApiRoutes(): bool
     {
-        return $this->hasApiRoutes;
+        return $this->evaluateClosureOrValue($this->hasApiRoutes);
     }
 
-    public function navigationGroup(string $group): static
+    public function navigationGroup(string|\Closure $group): static
     {
         $this->navigationGroup = $group;
         return $this->configureUsing('navigation.group', $group);
@@ -72,10 +72,11 @@ class FilamentAppVersionManagerPlugin implements Plugin
 
     public function getNavigationGroup(): string
     {
-        return $this->getConfig('navigation.group', __('filament-app-version-manager::app_version.navigation_group'));
+        $configValue = $this->getConfig('navigation.group', __('filament-app-version-manager::app_version.navigation_group'));
+        return $this->evaluateClosureOrValue($configValue);
     }
 
-    public function navigationIcon(string $icon): static
+    public function navigationIcon(string|\Closure $icon): static
     {
         $this->navigationIcon = $icon;
         return $this->configureUsing('navigation.icon', $icon);
@@ -83,10 +84,11 @@ class FilamentAppVersionManagerPlugin implements Plugin
 
     public function getNavigationIcon(): ?string
     {
-        return $this->getConfig('navigation.icon', $this->navigationIcon);
+        $configValue = $this->getConfig('navigation.icon', $this->navigationIcon);
+        return $this->evaluateClosureOrValue($configValue);
     }
 
-    public function navigationSort(int $sort): static
+    public function navigationSort(int|\Closure $sort): static
     {
         $this->navigationSort = $sort;
         return $this->configureUsing('navigation.sort', $sort);
@@ -94,7 +96,8 @@ class FilamentAppVersionManagerPlugin implements Plugin
 
     public function getNavigationSort(): ?int
     {
-        return $this->getConfig('navigation.sort', $this->navigationSort);
+        $configValue = $this->getConfig('navigation.sort', $this->navigationSort);
+        return $this->evaluateClosureOrValue($configValue);
     }
 
     /**
@@ -123,20 +126,31 @@ class FilamentAppVersionManagerPlugin implements Plugin
     public function getConfig(?string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
-            // Return merged configuration
-            return array_merge(
+            // Return merged configuration with evaluated closures
+            $config = array_merge(
                 config('filament-app-version-manager', []),
                 $this->configOverrides
             );
+
+            // Evaluate closures in the merged config
+            return $this->evaluateClosuresInArray($config);
         }
 
         // Check for override first
         if ($this->hasConfigOverride($key)) {
-            return $this->getConfigOverride($key);
+            $value = $this->getConfigOverride($key);
+            return $this->evaluateClosureOrValue($value);
         }
 
         // Fall back to config file
-        return config("filament-app-version-manager.{$key}", $default);
+        $value = config("filament-app-version-manager.{$key}");
+
+        // If config value is null, use the default
+        if ($value === null) {
+            $value = $default;
+        }
+
+        return $this->evaluateClosureOrValue($value);
     }
 
     /**
@@ -209,6 +223,32 @@ class FilamentAppVersionManagerPlugin implements Plugin
         $current = $value;
     }
 
+    /**
+     * Helper method to evaluate a closure or return the value directly
+     */
+    protected function evaluateClosureOrValue(mixed $value): mixed
+    {
+        return $value instanceof \Closure ? $value() : $value;
+    }
+
+    /**
+     * Helper method to recursively evaluate closures in an array
+     */
+    protected function evaluateClosuresInArray(array $array): array
+    {
+        $result = [];
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $result[$key] = $this->evaluateClosuresInArray($value);
+            } else {
+                $result[$key] = $this->evaluateClosureOrValue($value);
+            }
+        }
+
+        return $result;
+    }
+
     // ========================================
     // Fluent API Configuration Methods
     // ========================================
@@ -216,7 +256,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure API settings
      */
-    public function api(bool $enabled = true): static
+    public function api(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('api.enabled', $enabled);
     }
@@ -224,7 +264,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure API prefix
      */
-    public function apiPrefix(string $prefix): static
+    public function apiPrefix(string|\Closure $prefix): static
     {
         return $this->configureUsing('api.prefix', $prefix);
     }
@@ -232,7 +272,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure API middleware
      */
-    public function apiMiddleware(array $middleware): static
+    public function apiMiddleware(array|\Closure $middleware): static
     {
         return $this->configureUsing('api.middleware', $middleware);
     }
@@ -240,7 +280,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure API cache TTL
      */
-    public function apiCacheTtl(int $ttl): static
+    public function apiCacheTtl(int|\Closure $ttl): static
     {
         return $this->configureUsing('api.cache_ttl', $ttl);
     }
@@ -248,7 +288,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable API stats endpoint
      */
-    public function apiStats(bool $enabled = true): static
+    public function apiStats(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('api.enable_stats', $enabled);
     }
@@ -264,7 +304,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure semantic versioning validation
      */
-    public function semanticVersioning(bool $enabled = true): static
+    public function semanticVersioning(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('validation.semantic_versioning', $enabled);
     }
@@ -272,7 +312,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure maximum version length
      */
-    public function maxVersionLength(int $length): static
+    public function maxVersionLength(int|\Closure $length): static
     {
         return $this->configureUsing('validation.max_version_length', $length);
     }
@@ -280,7 +320,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure maximum build number length
      */
-    public function maxBuildNumberLength(int $length): static
+    public function maxBuildNumberLength(int|\Closure $length): static
     {
         return $this->configureUsing('validation.max_build_number_length', $length);
     }
@@ -288,7 +328,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure maximum download URL length
      */
-    public function maxDownloadUrlLength(int $length): static
+    public function maxDownloadUrlLength(int|\Closure $length): static
     {
         return $this->configureUsing('validation.max_download_url_length', $length);
     }
@@ -304,7 +344,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default platform
      */
-    public function defaultPlatform(string $platform): static
+    public function defaultPlatform(string|\Closure $platform): static
     {
         return $this->configureUsing('defaults.platform', $platform);
     }
@@ -312,7 +352,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default active state
      */
-    public function defaultIsActive(bool $active = true): static
+    public function defaultIsActive(bool|\Closure $active = true): static
     {
         return $this->configureUsing('defaults.is_active', $active);
     }
@@ -320,7 +360,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default beta state
      */
-    public function defaultIsBeta(bool $beta = false): static
+    public function defaultIsBeta(bool|\Closure $beta = false): static
     {
         return $this->configureUsing('defaults.is_beta', $beta);
     }
@@ -328,7 +368,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default rollback state
      */
-    public function defaultIsRollback(bool $rollback = false): static
+    public function defaultIsRollback(bool|\Closure $rollback = false): static
     {
         return $this->configureUsing('defaults.is_rollback', $rollback);
     }
@@ -336,7 +376,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default force update state
      */
-    public function defaultForceUpdate(bool $forceUpdate = false): static
+    public function defaultForceUpdate(bool|\Closure $forceUpdate = false): static
     {
         return $this->configureUsing('defaults.force_update', $forceUpdate);
     }
@@ -352,7 +392,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable multilingual release notes
      */
-    public function multilingualReleaseNotes(bool $enabled = true): static
+    public function multilingualReleaseNotes(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.multilingual_release_notes', $enabled);
     }
@@ -360,7 +400,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable version rollback
      */
-    public function versionRollback(bool $enabled = true): static
+    public function versionRollback(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.version_rollback', $enabled);
     }
@@ -368,7 +408,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable beta versions
      */
-    public function betaVersions(bool $enabled = true): static
+    public function betaVersions(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.beta_versions', $enabled);
     }
@@ -376,7 +416,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable force updates
      */
-    public function forceUpdates(bool $enabled = true): static
+    public function forceUpdates(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.force_updates', $enabled);
     }
@@ -384,7 +424,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable metadata storage
      */
-    public function metadataStorage(bool $enabled = true): static
+    public function metadataStorage(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.metadata_storage', $enabled);
     }
@@ -392,7 +432,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Enable or disable audit trail
      */
-    public function auditTrail(bool $enabled = true): static
+    public function auditTrail(bool|\Closure $enabled = true): static
     {
         return $this->configureUsing('features.audit_trail', $enabled);
     }
@@ -424,7 +464,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure database table name
      */
-    public function tableName(string $tableName): static
+    public function tableName(string|\Closure $tableName): static
     {
         return $this->configureUsing('database.table_name', $tableName);
     }
@@ -432,7 +472,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure database connection
      */
-    public function databaseConnection(?string $connection): static
+    public function databaseConnection(string|\Closure|null $connection): static
     {
         return $this->configureUsing('database.connection', $connection);
     }
@@ -448,7 +488,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure default locale
      */
-    public function defaultLocale(string $locale): static
+    public function defaultLocale(string|\Closure $locale): static
     {
         return $this->configureUsing('localization.default_locale', $locale);
     }
@@ -456,7 +496,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure supported locales
      */
-    public function supportedLocales(array $locales): static
+    public function supportedLocales(array|\Closure $locales): static
     {
         return $this->configureUsing('localization.supported_locales', $locales);
     }
@@ -464,7 +504,7 @@ class FilamentAppVersionManagerPlugin implements Plugin
     /**
      * Configure fallback locale
      */
-    public function fallbackLocale(string $locale): static
+    public function fallbackLocale(string|\Closure $locale): static
     {
         return $this->configureUsing('localization.fallback_locale', $locale);
     }
