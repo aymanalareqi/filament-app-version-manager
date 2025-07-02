@@ -24,13 +24,12 @@ class FilamentAppVersionManagerServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package->name(static::$name)
-            ->hasCommands($this->getCommands())
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('alareqi/filament-app-version-manager');
+                    ->askToStarRepoOnGitHub('aymanalareqi/filament-app-version-manager');
             });
 
         $configFileName = $package->shortName();
@@ -103,9 +102,7 @@ class FilamentAppVersionManagerServiceProvider extends PackageServiceProvider
      */
     protected function getCommands(): array
     {
-        return [
-            FilamentAppVersionManagerCommand::class,
-        ];
+        return [];
     }
 
     /**

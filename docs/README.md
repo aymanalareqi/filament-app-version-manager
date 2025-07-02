@@ -34,17 +34,17 @@ Welcome to the comprehensive documentation for the Filament App Version Manager 
 
 ## 🚀 Quick Links
 
-- **GitHub Repository**: [alareqi/filament-app-version-manager](https://github.com/alareqi/filament-app-version-manager)
+- **GitHub Repository**: [alareqi/filament-app-version-manager](https://github.com/aymanalareqi/filament-app-version-manager)
 - **Packagist**: [alareqi/filament-app-version-manager](https://packagist.org/packages/alareqi/filament-app-version-manager)
-- **Issues**: [Report a Bug](https://github.com/alareqi/filament-app-version-manager/issues)
-- **Discussions**: [Community Discussions](https://github.com/alareqi/filament-app-version-manager/discussions)
+- **Issues**: [Report a Bug](https://github.com/aymanalareqi/filament-app-version-manager/issues)
+- **Discussions**: [Community Discussions](https://github.com/aymanalareqi/filament-app-version-manager/discussions)
 
 ## 🆘 Need Help?
 
 1. **Check the Documentation**: Start with the relevant documentation section above
-2. **Search Issues**: Look through [existing issues](https://github.com/alareqi/filament-app-version-manager/issues) for similar problems
-3. **Create an Issue**: If you can't find a solution, [create a new issue](https://github.com/alareqi/filament-app-version-manager/issues/new)
-4. **Join Discussions**: Participate in [community discussions](https://github.com/alareqi/filament-app-version-manager/discussions)
+2. **Search Issues**: Look through [existing issues](https://github.com/aymanalareqi/filament-app-version-manager/issues) for similar problems
+3. **Create an Issue**: If you can't find a solution, [create a new issue](https://github.com/aymanalareqi/filament-app-version-manager/issues/new)
+4. **Join Discussions**: Participate in [community discussions](https://github.com/aymanalareqi/filament-app-version-manager/discussions)
 
 ## 📖 Table of Contents
 
@@ -95,7 +95,7 @@ We welcome contributions! Please see our [Contributing Guide](contributing.md) f
 ## 🙏 Credits
 
 - **Author**: [Ayman Alareqi](https://github.com/aymanalareqi)
-- **Contributors**: [All Contributors](https://github.com/alareqi/filament-app-version-manager/contributors)
+- **Contributors**: [All Contributors](https://github.com/aymanalareqi/filament-app-version-manager/contributors)
 - **Filament**: Built on top of the amazing [Filament](https://filamentphp.com) framework
 - **Laravel**: Powered by [Laravel](https://laravel.com)
 

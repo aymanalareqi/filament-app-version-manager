@@ -7,8 +7,8 @@
 <div align="center">
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/alareqi/filament-app-version-manager.svg?style=flat-square)](https://packagist.org/packages/alareqi/filament-app-version-manager)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/alareqi/filament-app-version-manager/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/alareqi/filament-app-version-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/alareqi/filament-app-version-manager/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/alareqi/filament-app-version-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/alareqi/filament-app-version-manager/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/aymanalareqi/filament-app-version-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/alareqi/filament-app-version-manager/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/aymanalareqi/filament-app-version-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/alareqi/filament-app-version-manager.svg?style=flat-square)](https://packagist.org/packages/alareqi/filament-app-version-manager)
 
 </div>
@@ -822,7 +822,7 @@ FilamentAppVersionManagerPlugin::make()
 
 If you're still experiencing issues:
 
-1. Check the [GitHub Issues](https://github.com/alareqi/filament-app-version-manager/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/aymanalareqi/filament-app-version-manager/issues) for similar problems
 2. Enable debug mode and check your Laravel logs
 3. Ensure you're using compatible versions of PHP, Laravel, and Filament
 4. Create a minimal reproduction case when reporting issues
@@ -854,6 +854,6 @@ This package is open-sourced software licensed under the [MIT license](LICENSE.m
 For support, please:
 
 1. Check this documentation first
-2. Search [existing issues](https://github.com/alareqi/filament-app-version-manager/issues)
+2. Search [existing issues](https://github.com/aymanalareqi/filament-app-version-manager/issues)
 3. Create a new issue with detailed information
 4. Consider sponsoring the project for priority support

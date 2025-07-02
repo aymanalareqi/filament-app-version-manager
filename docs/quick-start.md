@@ -267,8 +267,8 @@ Now that you have the basics working:
 
 - **Documentation**: Check the [full documentation](README.md)
 - **Examples**: Browse [configuration examples](../examples/)
-- **Issues**: Report problems on [GitHub Issues](https://github.com/alareqi/filament-app-version-manager/issues)
-- **Discussions**: Join [GitHub Discussions](https://github.com/alareqi/filament-app-version-manager/discussions)
+- **Issues**: Report problems on [GitHub Issues](https://github.com/aymanalareqi/filament-app-version-manager/issues)
+- **Discussions**: Join [GitHub Discussions](https://github.com/aymanalareqi/filament-app-version-manager/discussions)
 
 ## 🎉 You're Ready!
 
