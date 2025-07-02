@@ -190,6 +190,7 @@ class AppVersion extends Model
     {
         $releaseNotes = $this->release_notes;
 
+
         // If release_notes is null or empty, return null
         if (empty($releaseNotes) || !is_array($releaseNotes)) {
             return null;

@@ -62,7 +62,6 @@ class VersionController extends Controller
         $platform = Platform::from($request->input('platform'));
         $buildNumber = $request->input('build_number');
         $locale = $request->input('locale');
-
         // Create cache key (include locale for proper caching)
         $cacheKey = "app_version_check_{$platform->value}_{$currentVersion}_{$buildNumber}_{$locale}";
         $cacheTtl = FilamentAppVersionManager::getCacheTtl();
