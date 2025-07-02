@@ -55,12 +55,15 @@ class FilamentAppVersionManager
 
     public function getSupportedPlatforms(): array
     {
-        return array_keys($this->getConfig('platforms', []));
+        return \Alareqi\FilamentAppVersionManager\Enums\Platform::values();
     }
 
     public function getPlatformConfig(string $platform): array
     {
-        return $this->getConfig("platforms.{$platform}", []);
+        // Platform configuration is now handled directly by the Platform enum
+        // This method is kept for backward compatibility but returns empty array
+        // The $platform parameter is kept for backward compatibility
+        return [];
     }
 
     public function isFeatureEnabled(string $feature): bool

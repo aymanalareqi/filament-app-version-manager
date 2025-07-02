@@ -80,17 +80,8 @@ public function panel(Panel $panel): Panel
                 ->enableForceUpdate(fn() => !app()->environment('testing'))
                 ->enableMetadataStorage(fn() => config('app.env') !== 'local')
                 
-                // Custom platform configuration
-                ->addPlatform('web', [
-                    'label' => 'Web App',
-                    'color' => 'warning',
-                    'icon' => 'heroicon-o-globe-alt',
-                ])
-                ->addPlatform('desktop', [
-                    'label' => 'Desktop',
-                    'color' => 'gray',
-                    'icon' => 'heroicon-o-computer-desktop',
-                ])
+                // Custom platform configuration is now handled by extending the Platform enum
+                // See the configuration section below for an example of how to add custom platforms
                 
                 // Database configuration for multi-tenant apps
                 ->databaseConnection(function () {
@@ -162,30 +153,16 @@ return [
         'connection' => env('APP_VERSION_DB_CONNECTION'),
     ],
 
-    // Custom platforms for specialized apps
-    'platforms' => [
-        'ios' => [
-            'label' => 'iOS',
-            'color' => 'info',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-        'android' => [
-            'label' => 'Android',
-            'color' => 'success',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-        'web' => [
-            'label' => 'Web App',
-            'color' => 'warning',
-            'icon' => 'heroicon-o-globe-alt',
-        ],
-        'desktop' => [
-            'label' => 'Desktop',
-            'color' => 'gray',
-            'icon' => 'heroicon-o-computer-desktop',
-        ],
-
-    ],
+    // Platform configuration is now handled directly by the Platform enum
+    // To add custom platforms like 'web' or 'desktop', extend the Platform enum
+    // Example:
+    // enum Platform: string implements HasLabel, HasColor, HasIcon
+    // {
+    //     case IOS = 'ios';
+    //     case ANDROID = 'android';
+    //     case WEB = 'web';
+    //     case DESKTOP = 'desktop';
+    // }
 ];
 
 // Example .env configuration

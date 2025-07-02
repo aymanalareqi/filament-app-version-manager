@@ -28,7 +28,7 @@ For comprehensive documentation, examples, and guides, visit the [**docs**](docs
 
 - 🚀 **Complete Version Management**: Create, edit, and manage app versions for iOS, Android, and cross-platform releases
 - 🌍 **Multilingual Support**: Full localization with JSON multilingual fields and API locale support
-- 📱 **Platform Support**: iOS, Android, and All platforms with Filament enum integration
+- 📱 **Platform Support**: iOS and Android platforms with Filament enum integration
 - 🔄 **Version Rollback**: Built-in rollback functionality with proper validation
 - 📊 **API Integration**: RESTful API endpoints with localization, caching, and rate limiting
 - ⚡ **Force Updates**: Configure mandatory updates for critical releases
@@ -286,7 +286,7 @@ FilamentAppVersionManagerPlugin::make()
 Once installed, you'll find the "App Versions" resource in your Filament admin panel. You can:
 
 - Create new app versions with release notes in multiple languages
-- Set platform-specific versions (iOS, Android, All)
+- Set platform-specific versions (iOS, Android)
 - Configure force updates and beta releases
 - Manage version rollbacks
 - View comprehensive version history
@@ -398,7 +398,7 @@ Content-Type: application/json
 {
     "success": false,
     "error": "Invalid platform specified",
-    "message": "Platform must be one of: ios, android, all",
+    "message": "Platform must be one of: ios, android",
     "code": 422
 }
 ```
@@ -534,7 +534,7 @@ The plugin creates an `app_versions` table with the following structure:
 - `id` - Primary key
 - `version` - Version string (e.g., "1.0.0")
 - `build_number` - Optional build number
-- `platform` - Enum: ios, android, all
+- `platform` - Enum: ios, android
 - `minimum_required_version` - Minimum version required
 - `release_notes` - JSON multilingual field
 - `release_date` - Release date

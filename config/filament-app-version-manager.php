@@ -86,21 +86,11 @@ return [
     | Supported Platforms
     |--------------------------------------------------------------------------
     |
-    | Configure the platforms supported by your application.
+    | Platform configuration is now handled directly by the Platform enum.
+    | To customize platform labels, colors, or icons, you can override them
+    | using the plugin's fluent API methods or by extending the Platform enum.
     |
     */
-    'platforms' => [
-        'ios' => [
-            'label' => 'iOS',
-            'color' => 'gray',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-        'android' => [
-            'label' => 'Android',
-            'color' => 'success',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------

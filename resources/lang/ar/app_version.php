@@ -71,8 +71,8 @@ return [
     ],
 
     "platforms" => [
-        'ios' => 'iOS',
-        'android' => 'Android',
+        'ios' => 'آي او اس',
+        'android' => 'أندرويد',
     ],
 
     'filters' => [

@@ -13,12 +13,6 @@ enum Platform: string implements HasLabel, HasColor, HasIcon
 
     public function getLabel(): ?string
     {
-        $config = config('filament-app-version-manager.platforms.' . $this->value . '.label');
-
-        if ($config) {
-            return $config;
-        }
-
         return match ($this) {
             self::IOS => __('filament-app-version-manager::app_version.platforms.ios'),
             self::ANDROID => __('filament-app-version-manager::app_version.platforms.android'),
@@ -27,12 +21,6 @@ enum Platform: string implements HasLabel, HasColor, HasIcon
 
     public function getColor(): string|array|null
     {
-        $config = config('filament-app-version-manager.platforms.' . $this->value . '.color');
-
-        if ($config) {
-            return $config;
-        }
-
         return match ($this) {
             self::IOS => 'gray',
             self::ANDROID => 'success',
@@ -41,12 +29,6 @@ enum Platform: string implements HasLabel, HasColor, HasIcon
 
     public function getIcon(): ?string
     {
-        $config = config('filament-app-version-manager.platforms.' . $this->value . '.icon');
-
-        if ($config) {
-            return $config;
-        }
-
         return match ($this) {
             self::IOS => 'heroicon-o-device-phone-mobile',
             self::ANDROID => 'heroicon-o-device-phone-mobile',
@@ -74,19 +56,12 @@ enum Platform: string implements HasLabel, HasColor, HasIcon
     }
 
     /**
-     * Get platform from configuration
+     * Get all available platform cases
+     *
+     * @deprecated Use Platform::cases() directly instead
      */
     public static function fromConfig(): array
     {
-        $platforms = config('filament-app-version-manager.platforms', []);
-        $cases = [];
-
-        foreach (array_keys($platforms) as $value) {
-            if (in_array($value, self::values())) {
-                $cases[] = self::from($value);
-            }
-        }
-
-        return $cases ?: self::cases();
+        return self::cases();
     }
 }

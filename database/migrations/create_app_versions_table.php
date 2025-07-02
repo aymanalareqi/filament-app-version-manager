@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('version', 20)->index();
             $table->string('build_number', 50)->nullable();
-            $table->enum('platform', Platform::values())->index();
+            $table->string('platform')->index();
             $table->string('minimum_required_version', 20)->nullable();
             $table->json('release_notes')->nullable();
             $table->date('release_date')->index();

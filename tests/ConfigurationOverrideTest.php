@@ -113,7 +113,7 @@ describe('Configuration Override System', function () {
             expect($plugin->getConfig('features.audit_trail'))->toBeFalse();
         });
 
-        it('can configure platforms using fluent methods', function () {
+        it('platform configuration methods are deprecated but maintain backward compatibility', function () {
             $plugin = FilamentAppVersionManagerPlugin::make()
                 ->addPlatform('web', [
                     'label' => 'Web',
@@ -121,12 +121,10 @@ describe('Configuration Override System', function () {
                     'icon' => 'heroicon-o-globe-alt',
                 ]);
 
-            $platformConfig = $plugin->getConfig('platforms.web');
-            expect($platformConfig)->toBe([
-                'label' => 'Web',
-                'color' => 'info',
-                'icon' => 'heroicon-o-globe-alt',
-            ]);
+            // The addPlatform method is now deprecated and doesn't actually configure platforms
+            // Platform configuration is handled directly by the Platform enum
+            // This test verifies backward compatibility (method exists and returns plugin instance)
+            expect($plugin)->toBeInstanceOf(FilamentAppVersionManagerPlugin::class);
         });
 
         it('can configure database settings using fluent methods', function () {

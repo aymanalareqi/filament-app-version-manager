@@ -77,16 +77,6 @@ return [
         'connection' => null,
     ],
 
-    'platforms' => [
-        'ios' => [
-            'label' => 'iOS',
-            'color' => 'info',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-        'android' => [
-            'label' => 'Android',
-            'color' => 'success',
-            'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-    ],
+    // Platform configuration is now handled directly by the Platform enum
+    // To customize platform labels, colors, or icons, extend the Platform enum
 ];

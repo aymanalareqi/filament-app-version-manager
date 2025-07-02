@@ -439,18 +439,30 @@ class FilamentAppVersionManagerPlugin implements Plugin
 
     /**
      * Configure supported platforms
+     *
+     * @deprecated Platform configuration is now handled directly by the Platform enum.
+     *             Use the Platform enum methods to get platform information.
      */
     public function platforms(array $platforms): static
     {
-        return $this->configureWith(['platforms' => $platforms]);
+        // This method is kept for backward compatibility but no longer functional
+        // Platform configuration is now handled directly by the Platform enum
+        unset($platforms); // Suppress unused parameter warning
+        return $this;
     }
 
     /**
      * Add a platform configuration
+     *
+     * @deprecated Platform configuration is now handled directly by the Platform enum.
+     *             Extend the Platform enum to add custom platforms.
      */
     public function addPlatform(string $key, array $config): static
     {
-        return $this->configureUsing("platforms.{$key}", $config);
+        // This method is kept for backward compatibility but no longer functional
+        // Platform configuration is now handled directly by the Platform enum
+        unset($key, $config); // Suppress unused parameter warnings
+        return $this;
     }
 
     /**
