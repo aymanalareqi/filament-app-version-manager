@@ -161,7 +161,7 @@ The plugin configuration file is published to `config/filament-app-version-manag
 ### Default Values
 ```php
 'defaults' => [
-    'platform' => 'all',                 // Default platform for new versions
+    'platform' => 'ios',                 // Default platform for new versions
     'is_active' => true,                  // Default active status
     'is_beta' => false,                   // Default beta status
     'force_update' => false,              // Default force update status
@@ -309,7 +309,7 @@ POST /api/version/check
 Content-Type: application/json
 
 {
-    "platform": "ios",           // Required: "ios", "android", or "all"
+    "platform": "ios",           // Required: "ios" or "android"
     "current_version": "1.0.0",  // Required: Current app version
     "locale": "en"               // Optional: Preferred locale for release notes
 }
@@ -418,13 +418,11 @@ Get version statistics and analytics (when enabled in configuration).
     "beta_versions": 2,
     "platforms": {
         "ios": 6,
-        "android": 7,
-        "all": 2
+        "android": 7
     },
     "latest_versions": {
         "ios": "2.1.0",
-        "android": "2.0.5",
-        "all": "1.5.0"
+        "android": "2.0.5"
     },
     "generated_at": "2025-07-01T12:00:00.000000Z"
 }
@@ -622,7 +620,7 @@ AppVersion::create([
 // Create a force update version
 AppVersion::create([
     'version' => '1.5.0',
-    'platform' => Platform::ALL,
+    'platform' => Platform::IOS,
     'minimum_required_version' => '1.0.0',
     'release_date' => now(),
     'download_url' => 'https://yourapp.com/download',

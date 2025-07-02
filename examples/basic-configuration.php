@@ -66,7 +66,7 @@ return [
     ],
 
     'defaults' => [
-        'platform' => 'all',
+        'platform' => 'ios',
         'is_active' => true,
         'is_beta' => false,
         'force_update' => false,
@@ -87,11 +87,6 @@ return [
             'label' => 'Android',
             'color' => 'success',
             'icon' => 'heroicon-o-device-phone-mobile',
-        ],
-        'all' => [
-            'label' => 'All Platforms',
-            'color' => 'primary',
-            'icon' => 'heroicon-o-globe-alt',
         ],
     ],
 ];

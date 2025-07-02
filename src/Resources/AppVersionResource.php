@@ -111,7 +111,7 @@ class AppVersionResource extends Resource
                             ->helperText(__('filament-app-version-manager::app_version.help.platform'))
                             ->options(Platform::class)
                             ->required()
-                            ->default(static::getConfig('defaults.platform', Platform::ALL))
+                            ->default(static::getConfig('defaults.platform', Platform::IOS))
                             ->reactive(),
 
                         Forms\Components\TextInput::make('minimum_required_version')

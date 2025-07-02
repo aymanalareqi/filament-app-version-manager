@@ -191,7 +191,7 @@ use Alareqi\FilamentAppVersionManager\Enums\Platform;
 
 AppVersion::create([
     'version' => '1.0.0',
-    'platform' => Platform::ALL,
+    'platform' => Platform::IOS,
     'release_date' => now(),
     'download_url' => 'https://example.com/download',
     'release_notes' => [

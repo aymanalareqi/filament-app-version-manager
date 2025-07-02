@@ -40,7 +40,7 @@ public function panel(Panel $panel): Panel
 Visit your Filament admin panel and navigate to "App Versions" to create your first version:
 
 - **Version**: `1.0.0`
-- **Platform**: `All Platforms`
+- **Platform**: `iOS` or `Android`
 - **Release Date**: Today
 - **Download URL**: Your app store URL
 - **Release Notes**: Add notes in your supported languages

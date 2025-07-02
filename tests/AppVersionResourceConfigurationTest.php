@@ -11,7 +11,7 @@ describe('AppVersionResource Configuration Integration', function () {
             'filament-app-version-manager.navigation.icon' => 'heroicon-o-rocket-launch',
             'filament-app-version-manager.navigation.sort' => 1,
             'filament-app-version-manager.validation.max_version_length' => 20,
-            'filament-app-version-manager.defaults.platform' => 'all',
+            'filament-app-version-manager.defaults.platform' => 'ios',
             'filament-app-version-manager.features.beta_versions' => true,
         ]);
     });

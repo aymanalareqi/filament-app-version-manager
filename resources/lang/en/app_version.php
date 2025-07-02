@@ -73,7 +73,6 @@ return [
     "platforms" => [
         'ios' => 'iOS',
         'android' => 'Android',
-        'all' => 'All',
     ],
 
     'filters' => [
@@ -85,10 +84,6 @@ return [
 
     'tabs' => [
         'all' => 'All',
-        'active' => 'Active',
-        'inactive' => 'Inactive',
-        'beta' => 'Beta',
-        'force_update' => 'Force Update',
     ],
 
     'actions' => [

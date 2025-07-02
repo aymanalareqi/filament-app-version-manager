@@ -142,10 +142,7 @@ class AppVersion extends Model
     {
         $platformValue = $platform instanceof Platform ? $platform->value : $platform;
 
-        return $query->where(function ($q) use ($platformValue) {
-            $q->where('platform', $platformValue)
-                ->orWhere('platform', Platform::ALL->value);
-        });
+        return $query->where('platform', $platformValue);
     }
 
     /**

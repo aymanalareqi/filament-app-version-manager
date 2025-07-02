@@ -73,7 +73,6 @@ return [
     "platforms" => [
         'ios' => 'iOS',
         'android' => 'Android',
-        'all' => 'جميع المنصات',
     ],
 
     'filters' => [
@@ -81,6 +80,10 @@ return [
         'is_active' => 'حالة النشاط',
         'force_update' => 'تحديث إجباري',
         'is_beta' => 'إصدار تجريبي',
+    ],
+
+    'tabs' => [
+        'all' => 'الكل',
     ],
 
     'actions' => [

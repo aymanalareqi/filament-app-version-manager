@@ -43,7 +43,7 @@ Check for available updates for a specific platform and version.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `platform` | string | Yes | Platform identifier: `"ios"`, `"android"`, or `"all"` |
+| `platform` | string | Yes | Platform identifier: `"ios"` or `"android"` |
 | `current_version` | string | Yes | Current app version (semantic versioning) |
 | `build_number` | string | No | Build number for additional version tracking |
 | `locale` | string | No | Preferred locale for localized content (e.g., `"en"`, `"ar"`, `"fr"`) |

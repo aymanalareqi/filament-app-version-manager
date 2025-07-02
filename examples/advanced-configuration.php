@@ -151,7 +151,7 @@ return [
     ],
 
     'defaults' => [
-        'platform' => env('APP_VERSION_DEFAULT_PLATFORM', 'all'),
+        'platform' => env('APP_VERSION_DEFAULT_PLATFORM', 'ios'),
         'is_active' => env('APP_VERSION_DEFAULT_ACTIVE', true),
         'is_beta' => env('APP_VERSION_DEFAULT_BETA', false),
         'force_update' => env('APP_VERSION_DEFAULT_FORCE', false),
@@ -184,11 +184,7 @@ return [
             'color' => 'gray',
             'icon' => 'heroicon-o-computer-desktop',
         ],
-        'all' => [
-            'label' => 'All Platforms',
-            'color' => 'primary',
-            'icon' => 'heroicon-o-squares-2x2',
-        ],
+
     ],
 ];
 
