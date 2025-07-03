@@ -64,7 +64,7 @@ Content-Type: application/json
 
 #### Response Format
 
-**Success Response (Update Available):**
+**Success Response (Update Available - No Locale Specified):**
 ```json
 {
     "success": true,
@@ -124,7 +124,9 @@ Content-Type: application/json
 
 #### Localized Response
 
-When a locale is specified, the `release_notes` field returns a string instead of an object:
+**Success Response (Update Available - With Locale Specified):**
+
+When a locale is specified, the `release_notes` field returns a single localized string instead of an object containing all translations:
 
 ```json
 {
@@ -139,6 +141,88 @@ When a locale is specified, the `release_notes` field returns a string instead o
     "release_date": "2025-07-01T10:00:00.000000Z",
     "release_notes": "إصلاح الأخطاء والتحسينات",
     "checked_at": "2025-07-01T12:00:00.000000Z"
+}
+```
+
+**Key Difference:**
+- **Without locale**: `release_notes` is an object with all available translations
+- **With locale**: `release_notes` is a string with the localized content for the requested locale
+
+## Release Notes Response Format
+
+The format of the `release_notes` field in API responses depends on whether a locale parameter is included in the request:
+
+### Without Locale Parameter
+
+When no `locale` parameter is provided, the API returns all available translations as an object:
+
+```bash
+curl -X POST https://yourapp.com/api/version/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform": "ios",
+    "current_version": "1.0.0"
+  }'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "release_notes": {
+    "en": "Bug fixes and improvements",
+    "ar": "إصلاح الأخطاء والتحسينات",
+    "fr": "Corrections de bugs et améliorations"
+  }
+}
+```
+
+### With Locale Parameter
+
+When a `locale` parameter is provided, the API returns only the localized string for that specific locale:
+
+```bash
+curl -X POST https://yourapp.com/api/version/check \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform": "ios",
+    "current_version": "1.0.0",
+    "locale": "ar"
+  }'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "release_notes": "إصلاح الأخطاء والتحسينات"
+}
+```
+
+### Handling Both Formats in Code
+
+When consuming the API, you should handle both response formats:
+
+**PHP Example:**
+```php
+if (is_string($response['release_notes'])) {
+    // Localized response
+    $notes = $response['release_notes'];
+} elseif (is_array($response['release_notes'])) {
+    // All locales response - get specific locale or default
+    $notes = $response['release_notes']['en'] ?? reset($response['release_notes']);
+}
+```
+
+**JavaScript Example:**
+```javascript
+let releaseNotes;
+if (typeof response.release_notes === 'string') {
+    // Localized response
+    releaseNotes = response.release_notes;
+} else if (typeof response.release_notes === 'object') {
+    // All locales response - get specific locale or default
+    releaseNotes = response.release_notes.en || Object.values(response.release_notes)[0];
 }
 ```
 

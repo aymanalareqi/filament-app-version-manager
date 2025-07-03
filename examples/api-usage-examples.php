@@ -83,7 +83,15 @@ if ($result['success'] && $result['update_available']) {
     echo "Update available: {$result['latest_version']}\n";
     echo "Download URL: {$result['download_url']}\n";
     echo "Force update: " . ($result['force_update'] ? 'Yes' : 'No') . "\n";
-    echo "Release notes: {$result['release_notes']['en']}\n";
+
+    // Handle release notes based on response format
+    if (is_string($result['release_notes'])) {
+        // Localized response (when locale was specified)
+        echo "Release notes: {$result['release_notes']}\n";
+    } elseif (is_array($result['release_notes']) && isset($result['release_notes']['en'])) {
+        // All locales response (when no locale was specified)
+        echo "Release notes (EN): {$result['release_notes']['en']}\n";
+    }
 }
 
 // =============================================================================
@@ -156,8 +164,16 @@ versionManager.checkForUpdates('android', '2.0.0', 'ar')
         if (result.success && result.update_available) {
             console.log('Update available:', result.latest_version);
             console.log('Force update:', result.force_update);
-            console.log('Release notes (Arabic):', result.release_notes.ar);
-            
+
+            // Handle release notes based on response format
+            if (typeof result.release_notes === 'string') {
+                // Localized response (when locale was specified)
+                console.log('Release notes (Arabic):', result.release_notes);
+            } else if (typeof result.release_notes === 'object' && result.release_notes.ar) {
+                // All locales response (when no locale was specified)
+                console.log('Release notes (Arabic):', result.release_notes.ar);
+            }
+
             // Show update dialog to user
             showUpdateDialog(result);
         }
@@ -376,7 +392,11 @@ class MainActivity : AppCompatActivity() {
                     latestVersion = result.latest_version ?: "",
                     forceUpdate = result.force_update ?: false,
                     downloadUrl = result.download_url ?: "",
-                    releaseNotes = result.release_notes?.get("ar") ?: ""
+                    releaseNotes = when (result.release_notes) {
+                        is String -> result.release_notes // Localized response
+                        is Map<*, *> -> result.release_notes["ar"] as? String ?: "" // All locales response
+                        else -> ""
+                    }
                 )
             }
         }

@@ -11,17 +11,17 @@
 function checkVersionWithLocale($platform, $currentVersion, $locale = null)
 {
     $url = 'https://yourapp.com/api/version/check';
-    
+
     $data = [
         'platform' => $platform,
         'current_version' => $currentVersion,
     ];
-    
+
     // Add locale if provided
     if ($locale) {
         $data['locale'] = $locale;
     }
-    
+
     $options = [
         'http' => [
             'header' => "Content-type: application/json\r\n",
@@ -29,10 +29,10 @@ function checkVersionWithLocale($platform, $currentVersion, $locale = null)
             'content' => json_encode($data),
         ],
     ];
-    
+
     $context = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
-    
+
     return json_decode($result, true);
 }
 
@@ -55,16 +55,16 @@ print_r($defaultResponse);
 function checkVersionWithCurl($platform, $currentVersion, $locale = null)
 {
     $url = 'https://yourapp.com/api/version/check';
-    
+
     $data = [
         'platform' => $platform,
         'current_version' => $currentVersion,
     ];
-    
+
     if ($locale) {
         $data['locale'] = $locale;
     }
-    
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -75,15 +75,15 @@ function checkVersionWithCurl($platform, $currentVersion, $locale = null)
     ]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    
+
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    
+
     if ($httpCode !== 200) {
         throw new Exception("API request failed with HTTP code: $httpCode");
     }
-    
+
     return json_decode($response, true);
 }
 
@@ -91,7 +91,7 @@ function checkVersionWithCurl($platform, $currentVersion, $locale = null)
 function checkMultipleLocales($platform, $currentVersion, $locales)
 {
     $results = [];
-    
+
     foreach ($locales as $locale) {
         try {
             $results[$locale] = checkVersionWithCurl($platform, $currentVersion, $locale);
@@ -101,7 +101,7 @@ function checkMultipleLocales($platform, $currentVersion, $locales)
             $results[$locale] = null;
         }
     }
-    
+
     return $results;
 }
 
@@ -116,34 +116,34 @@ function handleVersionCheckResponse($response, $locale = null)
         echo "❌ Version check failed\n";
         return false;
     }
-    
+
     if ($response['update_available']) {
         echo "🔄 Update available!\n";
         echo "Current: {$response['current_version']}\n";
         echo "Latest: {$response['latest_version']}\n";
-        
+
         if ($response['force_update']) {
             echo "⚠️  This is a mandatory update\n";
         }
-        
+
         // Handle localized release notes
         if (isset($response['release_notes'])) {
             if (is_string($response['release_notes'])) {
-                // Localized response
+                // Localized response - when locale was specified in request
                 echo "📝 Release Notes ($locale): {$response['release_notes']}\n";
             } elseif (is_array($response['release_notes'])) {
-                // All locales response
+                // All locales response - when no locale was specified in request
                 echo "📝 Release Notes (all locales):\n";
                 foreach ($response['release_notes'] as $lang => $notes) {
                     echo "  - $lang: $notes\n";
                 }
             }
         }
-        
+
         if (isset($response['download_url'])) {
             echo "📱 Download: {$response['download_url']}\n";
         }
-        
+
         return true;
     } else {
         echo "✅ You're using the latest version\n";
@@ -158,31 +158,30 @@ function completeVersionCheck($platform, $currentVersion, $userLocale = 'en')
     echo "Platform: $platform\n";
     echo "Current Version: $currentVersion\n";
     echo "User Locale: $userLocale\n\n";
-    
+
     try {
         // First, try with user's preferred locale
         $response = checkVersionWithCurl($platform, $currentVersion, $userLocale);
         $updateAvailable = handleVersionCheckResponse($response, $userLocale);
-        
+
         // If update is available and it's a force update, handle accordingly
         if ($updateAvailable && $response['force_update']) {
             echo "\n🚨 CRITICAL UPDATE REQUIRED\n";
             echo "This update is mandatory and must be installed.\n";
-            
+
             // In a real app, you would redirect to app store or show update dialog
             return 'force_update_required';
         } elseif ($updateAvailable) {
             echo "\n💡 Optional update available\n";
             echo "Users can choose to update now or later.\n";
-            
+
             return 'optional_update_available';
         } else {
             return 'up_to_date';
         }
-        
     } catch (Exception $e) {
         echo "❌ Error checking for updates: " . $e->getMessage() . "\n";
-        
+
         // Fallback: try without locale
         try {
             echo "🔄 Retrying without locale...\n";
@@ -217,7 +216,7 @@ class VersionChecker
     private $baseUrl;
     private $timeout;
     private $defaultLocale;
-    
+
     public function __construct($environment = 'production')
     {
         switch ($environment) {
@@ -235,10 +234,10 @@ class VersionChecker
                 $this->timeout = 30;
                 break;
         }
-        
+
         $this->defaultLocale = 'en';
     }
-    
+
     public function checkVersion($platform, $currentVersion, $locale = null, $buildNumber = null)
     {
         $data = [
@@ -246,11 +245,11 @@ class VersionChecker
             'current_version' => $currentVersion,
             'locale' => $locale ?: $this->defaultLocale,
         ];
-        
+
         if ($buildNumber) {
             $data['build_number'] = $buildNumber;
         }
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->baseUrl . '/check');
         curl_setopt($ch, CURLOPT_POST, true);
@@ -263,20 +262,20 @@ class VersionChecker
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        
+
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
-        
+
         if ($error) {
             throw new Exception("cURL error: $error");
         }
-        
+
         if ($httpCode !== 200) {
             throw new Exception("HTTP error: $httpCode");
         }
-        
+
         return json_decode($response, true);
     }
 }

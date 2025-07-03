@@ -97,7 +97,19 @@ curl -X POST http://yourapp.com/api/version/check \
   }'
 ```
 
-Expected response:
+Expected response (with locale specified):
+```json
+{
+    "success": true,
+    "update_available": true,
+    "latest_version": "1.1.0",
+    "force_update": false,
+    "download_url": "https://apps.apple.com/app/yourapp",
+    "release_notes": "Bug fixes and improvements"
+}
+```
+
+Expected response (without locale):
 ```json
 {
     "success": true,
@@ -106,7 +118,8 @@ Expected response:
     "force_update": false,
     "download_url": "https://apps.apple.com/app/yourapp",
     "release_notes": {
-        "en": "Bug fixes and improvements"
+        "en": "Bug fixes and improvements",
+        "ar": "إصلاح الأخطاء والتحسينات"
     }
 }
 ```
@@ -154,8 +167,9 @@ When creating versions in the admin panel, you'll see tabs for each language:
 - **Français Tab**: Enter French release notes
 - **Español Tab**: Enter Spanish release notes
 
-### 3. API Returns All Languages
+### 3. API Response Format
 
+**Without locale parameter (returns all languages):**
 ```json
 {
     "release_notes": {
@@ -164,6 +178,13 @@ When creating versions in the admin panel, you'll see tabs for each language:
         "fr": "Corrections de bugs et améliorations",
         "es": "Corrección de errores y mejoras"
     }
+}
+```
+
+**With locale parameter (returns single localized string):**
+```json
+{
+    "release_notes": "Bug fixes and improvements"
 }
 ```
 

@@ -315,7 +315,7 @@ Content-Type: application/json
 }
 ```
 
-**Response:**
+**Response (without locale parameter):**
 ```json
 {
     "success": true,
@@ -342,7 +342,7 @@ Content-Type: application/json
 
 #### Localized API Responses
 
-When a `locale` parameter is provided, the API returns localized content for that specific language:
+When a `locale` parameter is provided, the API returns localized content for that specific language. **The key difference is that `release_notes` returns a single string value instead of an object.**
 
 **Request with locale:**
 ```http
@@ -356,7 +356,7 @@ Content-Type: application/json
 }
 ```
 
-**Localized Response:**
+**Localized Response (with locale specified):**
 ```json
 {
     "success": true,
@@ -372,6 +372,10 @@ Content-Type: application/json
     "checked_at": "2025-07-01T12:00:00.000000Z"
 }
 ```
+
+**API Response Format Summary:**
+- **Without locale**: `release_notes` is an object containing all available translations
+- **With locale**: `release_notes` is a string containing the localized text for the requested locale
 
 **Fallback Logic:**
 - If the requested locale is not available, falls back to the default locale
@@ -474,8 +478,9 @@ When creating or editing app versions, you'll see:
 
 ### API Response
 
-Release notes are returned as a JSON object with locale keys:
+The format of release notes in API responses depends on whether a locale is specified:
 
+**Without locale parameter (all translations):**
 ```json
 {
     "release_notes": {
@@ -486,6 +491,34 @@ Release notes are returned as a JSON object with locale keys:
 }
 ```
 
+**With locale parameter (single localized string):**
+```json
+{
+    "release_notes": "Bug fixes and performance improvements"
+}
+```
+
+### Understanding API Response Formats
+
+The Filament App Version Manager API returns different formats for the `release_notes` field depending on whether you specify a locale in your request:
+
+| Request Type | `release_notes` Format | Use Case |
+|-------------|----------------------|----------|
+| No locale parameter | Object with all translations | When you want to handle multiple languages client-side |
+| With locale parameter | Single localized string | When you want pre-localized content for a specific language |
+
+**Example Requests:**
+
+```bash
+# Returns all translations
+curl -X POST /api/version/check -d '{"platform":"ios","current_version":"1.0.0"}'
+
+# Returns only English translation
+curl -X POST /api/version/check -d '{"platform":"ios","current_version":"1.0.0","locale":"en"}'
+```
+
+This design allows maximum flexibility - use the format that best fits your application's localization strategy.
+
 ### Programmatic Usage
 
 Create versions with multilingual release notes:
@@ -494,6 +527,7 @@ Create versions with multilingual release notes:
 use Alareqi\FilamentAppVersionManager\Models\AppVersion;
 use Alareqi\FilamentAppVersionManager\Enums\Platform;
 
+// Creating a version with multilingual release notes
 AppVersion::create([
     'version' => '2.0.0',
     'platform' => Platform::IOS,
@@ -506,6 +540,11 @@ AppVersion::create([
     'download_url' => 'https://apps.apple.com/app/yourapp',
     'is_active' => true,
 ]);
+
+// Note: The release_notes are stored as an array in the database,
+// but the API response format depends on whether a locale is specified:
+// - Without locale: returns the full array
+// - With locale: returns the localized string for that locale
 ```
 
 ## 🎨 Customization
