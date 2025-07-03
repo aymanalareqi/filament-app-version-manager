@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *No unreleased changes at this time.*
 
-## [1.0.0] - 2025-07-03
+## [v1.0.0] - 2025-07-03
 
 **Initial Release** - The first stable release of the Filament App Version Manager plugin, providing a complete solution for managing mobile app versions with comprehensive multilingual support, advanced configuration options, and production-ready features.
 
