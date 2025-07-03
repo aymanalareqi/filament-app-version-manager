@@ -7,30 +7,21 @@ Welcome to the comprehensive documentation for the Filament App Version Manager 
 ### Getting Started
 - [Installation Guide](installation.md) - Step-by-step installation instructions
 - [Quick Start](quick-start.md) - Get up and running in minutes
-- [Configuration](configuration.md) - Complete configuration reference
-
-### Features
-- [Fluent API](fluent-api.md) - Advanced configuration with method chaining
-- [Multilingual Support](multilingual.md) - Setting up multilingual release notes
 - [API Documentation](api.md) - RESTful API endpoints with localization support
-- [Version Management](version-management.md) - Managing app versions effectively
 
-### Advanced Topics
-- [Closure Configuration](closure-configuration.md) - Dynamic configuration with closures
-- [Custom Platforms](custom-platforms.md) - Adding custom platform support
-- [Performance Optimization](performance.md) - Caching and optimization strategies
-- [Security](security.md) - Security best practices and considerations
-
-### Development
-- [Testing](testing.md) - Running tests and creating sample data
-- [Contributing](contributing.md) - How to contribute to the project
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions
-
-### Examples
+### Examples & Configuration
 - [Basic Configuration](../examples/basic-configuration.php) - Simple setup examples
-- [Advanced Configuration](../examples/advanced-configuration.php) - Complex configuration scenarios
+- [Advanced Configuration](../examples/advanced-configuration.php) - Complex configuration scenarios with closures
 - [API Usage Examples](../examples/api-usage-examples.php) - Multi-language API integration
 - [Localized API Usage](../examples/localized-api-usage.php) - Localized API integration examples
+
+### Key Features
+- **Multilingual Support**: Full bilingual support with individual textarea fields and language tabs
+- **Localized API Responses**: API endpoints support locale parameter for localized release notes
+- **Advanced Configuration**: Fluent API with method chaining and closure support for dynamic configuration
+- **Platform Management**: iOS and Android platform support with enum-based configuration
+- **Version Control**: Version rollback functionality with audit trail and force update capabilities
+- **Production Ready**: Clean architecture without development artifacts, comprehensive testing
 
 ## 🚀 Quick Links
 
@@ -49,11 +40,12 @@ Welcome to the comprehensive documentation for the Filament App Version Manager 
 ## 📖 Table of Contents
 
 ### Core Concepts
-- **App Versions**: Understanding the version management system
-- **Platforms**: iOS, Android, and cross-platform support
-- **Release Notes**: Multilingual release notes with rich formatting
-- **Version States**: Active, beta, and rollback versions
-- **Force Updates**: Mandatory updates for critical releases
+- **App Versions**: Complete version management system with CRUD operations through Filament admin interface
+- **Platforms**: iOS and Android platform support using Filament enums with labels, colors, and icons
+- **Release Notes**: Multilingual release notes with individual textarea components and language tabs
+- **Version States**: Active, beta, and rollback versions with audit trail
+- **Force Updates**: Mandatory updates for critical releases with intelligent fallback logic
+- **API Localization**: Locale-specific API responses with fallback to default language
 
 ### Configuration System
 - **Config Files**: Traditional Laravel configuration

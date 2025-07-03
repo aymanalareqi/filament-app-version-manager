@@ -171,7 +171,7 @@ return [
 
 ### Advanced Configuration
 
-For advanced configuration options, see the [Configuration Guide](configuration.md).
+For advanced configuration options, see the [Advanced Configuration Examples](../examples/advanced-configuration.php).
 
 ## ✅ Verification
 
@@ -232,7 +232,7 @@ If API endpoints are not accessible:
 2. Clear route cache: `php artisan route:clear`
 3. Check your web server configuration
 
-For more troubleshooting tips, see the [Troubleshooting Guide](troubleshooting.md).
+For more troubleshooting tips, check the main [README.md](../README.md) troubleshooting section.
 
 ## 🎉 Next Steps
 
@@ -247,7 +247,8 @@ Continue with the [Quick Start Guide](quick-start.md) to begin using the package
 
 ## 📚 Additional Resources
 
-- [Configuration Guide](configuration.md) - Complete configuration reference
-- [API Integration](api-integration.md) - Setting up API endpoints
-- [Fluent API](fluent-api.md) - Advanced configuration methods
-- [Examples](../examples/) - Practical configuration examples
+- [API Documentation](api.md) - Complete API reference with localization support
+- [Quick Start Guide](quick-start.md) - Get up and running in minutes
+- [Basic Configuration Examples](../examples/basic-configuration.php) - Simple setup examples
+- [Advanced Configuration Examples](../examples/advanced-configuration.php) - Complex configuration with closures
+- [API Usage Examples](../examples/api-usage-examples.php) - Multi-language API integration

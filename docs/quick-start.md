@@ -266,13 +266,13 @@ dd($versions->toArray());
 Now that you have the basics working:
 
 1. **Explore Advanced Features**:
-   - [Fluent API Configuration](fluent-api.md)
-   - [Closure-Based Configuration](closure-configuration.md)
-   - [Custom Platform Support](custom-platforms.md)
+   - [Advanced Configuration Examples](../examples/advanced-configuration.php) - Fluent API and closure-based configuration
+   - [API Documentation](api.md) - Complete API reference with localization support
+   - [Basic Configuration Examples](../examples/basic-configuration.php) - Simple setup examples
 
 2. **Integrate with Your Mobile Apps**:
-   - [API Integration Guide](api-integration.md)
-   - [Mobile App Examples](../examples/api-usage-examples.php)
+   - [API Usage Examples](../examples/api-usage-examples.php) - Multi-language API integration examples
+   - [Localized API Usage](../examples/localized-api-usage.php) - Localized API integration examples
 
 3. **Optimize for Production**:
    - [Performance Optimization](performance.md)

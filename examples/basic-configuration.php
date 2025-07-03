@@ -10,6 +10,8 @@
 use Alareqi\FilamentAppVersionManager\FilamentAppVersionManagerPlugin;
 
 // Basic plugin registration in your Filament Panel Provider
+// In your Filament Panel Provider:
+/*
 public function panel(Panel $panel): Panel
 {
     return $panel
@@ -27,6 +29,7 @@ public function panel(Panel $panel): Panel
                 ->enableForceUpdate(true),
         ]);
 }
+*/
 
 // Alternative: Configuration file approach
 // In config/filament-app-version-manager.php

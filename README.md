@@ -601,7 +601,7 @@ Translation files are located in:
 
 ## 🧪 Testing
 
-The plugin includes comprehensive test coverage with 50+ tests covering all functionality.
+The plugin includes comprehensive test coverage with 58+ tests and 161+ assertions covering all functionality.
 
 ### Running Tests
 

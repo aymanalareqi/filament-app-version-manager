@@ -14,6 +14,8 @@
 use Alareqi\FilamentAppVersionManager\FilamentAppVersionManagerPlugin;
 
 // Advanced plugin registration with dynamic configuration
+// In your Filament Panel Provider:
+/*
 public function panel(Panel $panel): Panel
 {
     return $panel
@@ -100,6 +102,7 @@ public function panel(Panel $panel): Panel
                 ]),
         ]);
 }
+*/
 
 // Advanced configuration file with environment variables
 // In config/filament-app-version-manager.php
@@ -192,7 +195,7 @@ APP_VERSION_MAX_LENGTH=25
 APP_VERSION_MAX_BUILD=999999
 APP_VERSION_MAX_NOTES=2000
 
-APP_VERSION_DEFAULT_PLATFORM=all
+APP_VERSION_DEFAULT_PLATFORM=ios
 APP_VERSION_DEFAULT_ACTIVE=true
 APP_VERSION_DEFAULT_BETA=false
 APP_VERSION_DEFAULT_FORCE=false
